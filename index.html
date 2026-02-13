@@ -48,18 +48,20 @@
 
     /* Axis labels */
     .axis-label {
-      position: absolute;
+      position: fixed;
       font-size: 0.75rem;
       font-weight: 300;
       letter-spacing: 0.2em;
-      color: #ccc;
+      color: #bbb;
       white-space: nowrap;
+      z-index: 100;
+      pointer-events: none;
     }
 
-    .axis-label-top    { left: 1000px; top: 40px; transform: translateX(-50%); }
-    .axis-label-bottom { left: 1000px; bottom: 40px; transform: translateX(-50%); }
-    .axis-label-left   { top: 1000px; left: 40px; transform: translateY(-50%); }
-    .axis-label-right  { top: 1000px; right: 40px; transform: translateY(-50%); }
+    .axis-label-top    { left: 50%; top: 1rem; transform: translateX(-50%); }
+    .axis-label-bottom { left: 50%; bottom: 1rem; transform: translateX(-50%); }
+    .axis-label-left   { top: 50%; left: 1rem; transform: translateY(-50%); }
+    .axis-label-right  { top: 50%; right: 1rem; transform: translateY(-50%); }
 
     /* Quadrant background labels */
     .quadrant-label {
@@ -196,16 +198,18 @@
     <div class="axis-line-v"></div>
     <div class="origin"></div>
 
-    <div class="axis-label axis-label-top">↑ 壮大な野望</div>
-    <div class="axis-label axis-label-bottom">↓ 身近な望み</div>
-    <div class="axis-label axis-label-left">← すぐ手を出せる</div>
-    <div class="axis-label axis-label-right">いつかきっと →</div>
+    <!-- axis labels moved to fixed overlay -->
 
     <div class="quadrant-label ql-close-big">🔥 今すぐ動け</div>
     <div class="quadrant-label ql-far-big">🌟 星に手を伸ばせ</div>
     <div class="quadrant-label ql-close-small">✨ サクッとやろう</div>
     <div class="quadrant-label ql-far-small">💭 あたためておく</div>
   </div>
+
+  <div class="axis-label axis-label-top">↑ 壮大な野望</div>
+  <div class="axis-label axis-label-bottom">↓ 身近な望み</div>
+  <div class="axis-label axis-label-left">← すぐ手を出せる</div>
+  <div class="axis-label axis-label-right">いつかきっと →</div>
 
   <div id="minimap">
     <div class="mm-cross-h"></div>
