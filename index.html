@@ -150,8 +150,8 @@
     }
 
     .sidebar-item.done .si-name {
-      text-decoration: line-through;
-      color: #aaa;
+      color: #b8860b;
+      font-weight: 600;
     }
 
     .sidebar-item .si-done-dot {
@@ -159,7 +159,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #27ae60;
+      background: #f0c040;
       margin-left: 0.3rem;
       vertical-align: middle;
     }
@@ -251,17 +251,22 @@
     .item.q-close-small  { border-left-color: #27ae60; }
     .item.q-far-small   { border-left-color: #3498db; }
 
-    .item.done { opacity: 0.6; border-left-color: #aaa !important; background: #f5f5f5; }
-    .item.done .text { text-decoration: line-through; color: #999; }
+    .item.done {
+      background: linear-gradient(135deg, #fff9e6, #fff4cc);
+      border-left-color: #f0c040 !important;
+      box-shadow: 0 2px 16px rgba(240, 192, 64, 0.2);
+    }
+    .item.done .text { color: #333; }
     .item.done .done-badge {
       display: inline-block;
       font-size: 0.65rem;
-      background: #27ae60;
+      background: linear-gradient(135deg, #f0c040, #e6a800);
       color: #fff;
-      padding: 0.1rem 0.4rem;
+      padding: 0.15rem 0.5rem;
       border-radius: 4px;
       margin-left: 0.4rem;
       font-weight: 600;
+      letter-spacing: 0.05em;
     }
 
     .item.hidden { display: none; }
@@ -698,7 +703,7 @@
         el.dataset.itemId = item.id;
         el.style.left = x + 'px';
         el.style.top = y + 'px';
-        const badge = isDone ? '<span class="done-badge">✓ DONE</span>' : '';
+        const badge = isDone ? '<span class="done-badge">👑 DONE</span>' : '';
         el.innerHTML = `
           <span class="emoji">${item.emoji || ''}</span><span class="text">${item.text}</span>${badge}
           <div class="date">${item.addedAt}${isDone ? ' → ' + item.doneAt : ''}</div>
