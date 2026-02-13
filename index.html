@@ -257,17 +257,7 @@
       box-shadow: 0 2px 16px rgba(240, 192, 64, 0.2);
     }
     .item.done .text { color: #333; }
-    .item.done .done-badge {
-      display: inline-block;
-      font-size: 0.65rem;
-      background: linear-gradient(135deg, #f0c040, #e6a800);
-      color: #fff;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      margin-left: 0.4rem;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-    }
+    /* done badge removed - color indicates status */
 
     .item.hidden { display: none; }
     .item.highlight { box-shadow: 0 0 0 3px #e67e22, 0 4px 20px rgba(0,0,0,0.15); z-index: 10; }
@@ -894,23 +884,23 @@
         el.dataset.itemId = item.id;
         el.style.left = x + 'px';
         el.style.top = y + 'px';
-        const badge = isDone ? '<span class="done-badge">👑 DONE</span>' : '';
-        let progressHtml = '';
-        if (item.progress) {
-          const p = item.progress;
-          const pct = Math.min(100, Math.round((p.current / p.target) * 100));
-          progressHtml = `
-            <div class="item-progress">
-              <div class="item-progress-label">
-                <span>${p.current}${p.unit || ''}</span>
-                <span>${pct}% → ${p.target}${p.unit || ''}</span>
-              </div>
-              <div class="item-progress-bar">
-                <div class="item-progress-fill" style="width:${pct}%"></div>
-              </div>
-            </div>
-          `;
+        let p = item.progress;
+        if (!p) {
+          p = isDone ? { current: 1, target: 1, unit: '' } : { current: 0, target: 1, unit: '' };
         }
+        const pct = Math.min(100, Math.round((p.current / p.target) * 100));
+        const showLabel = p.target !== 1;
+        const progressHtml = `
+          <div class="item-progress">
+            ${showLabel ? `<div class="item-progress-label">
+              <span>${p.current}${p.unit || ''}</span>
+              <span>${pct}% → ${p.target}${p.unit || ''}</span>
+            </div>` : ''}
+            <div class="item-progress-bar">
+              <div class="item-progress-fill" style="width:${pct}%"></div>
+            </div>
+          </div>
+        `;
 
         let groupBadge = '';
         if (item.isGroup && item.children) {
@@ -920,7 +910,7 @@
         }
 
         el.innerHTML = `
-          <span class="emoji">${item.emoji || ''}</span><span class="text">${item.text}</span>${badge}${groupBadge}
+          <span class="emoji">${item.emoji || ''}</span><span class="text">${item.text}</span>${groupBadge}
           ${progressHtml}
           <div class="date">${item.addedAt}${isDone ? ' → ' + item.doneAt : ''}</div>
         `;
@@ -1032,10 +1022,15 @@
         childEl.style.transform = `scale(${1 / zoom})`;
         childEl.style.transformOrigin = 'top left';
 
-        const badge = cDone ? '<span class="done-badge">👑 DONE</span>' : '';
+        const cPct = cDone ? 100 : 0;
         const notesText = child.notes ? `<div class="date">${child.notes}</div>` : '';
         childEl.innerHTML = `
-          <span class="emoji">${child.emoji || ''}</span><span class="text">${child.text}</span>${badge}
+          <span class="emoji">${child.emoji || ''}</span><span class="text">${child.text}</span>
+          <div class="item-progress">
+            <div class="item-progress-bar">
+              <div class="item-progress-fill" style="width:${cPct}%"></div>
+            </div>
+          </div>
           ${notesText}
         `;
 
