@@ -22,14 +22,163 @@
 
     body.dragging { cursor: grabbing; }
 
+    /* --- Sidebar --- */
+    #sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-right: 1px solid #e8e8e8;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(0);
+      transition: transform 0.25s ease;
+      user-select: none;
+    }
+
+    #sidebar.collapsed {
+      transform: translateX(-280px);
+    }
+
+    #sidebar-toggle {
+      position: fixed;
+      left: 280px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 201;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #e0e0e0;
+      border-left: none;
+      border-radius: 0 6px 6px 0;
+      padding: 0.6rem 0.3rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      color: #888;
+      transition: left 0.25s ease;
+      backdrop-filter: blur(8px);
+    }
+
+    #sidebar.collapsed ~ #sidebar-toggle {
+      left: 0;
+    }
+
+    .sidebar-header {
+      padding: 1.2rem 1rem 0.8rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .sidebar-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .sidebar-header p {
+      font-size: 0.7rem;
+      color: #999;
+      margin-top: 0.2rem;
+    }
+
+    /* Filters */
+    .sidebar-filters {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      color: #666;
+      transition: all 0.15s ease;
+    }
+
+    .filter-btn:hover { border-color: #bbb; }
+    .filter-btn.active { background: #333; color: #fff; border-color: #333; }
+
+    /* Item list */
+    .sidebar-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+    }
+
+    .sidebar-item {
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      transition: background 0.1s ease;
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .sidebar-item:hover {
+      background: #f5f5f5;
+    }
+
+    .sidebar-item .si-emoji {
+      flex-shrink: 0;
+      font-size: 1rem;
+      margin-top: 0.1rem;
+    }
+
+    .sidebar-item .si-text {
+      flex: 1;
+    }
+
+    .sidebar-item .si-name {
+      display: block;
+    }
+
+    .sidebar-item .si-meta {
+      font-size: 0.65rem;
+      color: #aaa;
+      margin-top: 0.15rem;
+    }
+
+    .sidebar-item.done .si-name {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    .sidebar-item .si-done-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #27ae60;
+      margin-left: 0.3rem;
+      vertical-align: middle;
+    }
+
+    .sidebar-count {
+      padding: 0.6rem 1rem;
+      border-top: 1px solid #eee;
+      font-size: 0.7rem;
+      color: #aaa;
+      text-align: center;
+    }
+
+    /* --- Canvas --- */
     #canvas {
       position: absolute;
       width: 4000px;
       height: 4000px;
     }
 
-    /* Grid lines */
-    /* Quadrant backgrounds */
     .quad-bg {
       position: absolute;
       width: 10000px;
@@ -44,20 +193,9 @@
       position: absolute;
       background: #bbb;
     }
-    .axis-line-h {
-      width: 20000px;
-      height: 2px;
-      top: 2000px;
-      left: -9000px;
-    }
-    .axis-line-v {
-      height: 20000px;
-      width: 2px;
-      left: 2000px;
-      top: -9000px;
-    }
+    .axis-line-h { width: 20000px; height: 2px; top: 2000px; left: -9000px; }
+    .axis-line-v { height: 20000px; width: 2px; left: 2000px; top: -9000px; }
 
-    /* Axis labels */
     .axis-label {
       position: fixed;
       font-size: 0.75rem;
@@ -74,19 +212,24 @@
     .axis-label-left   { top: 50%; left: 1rem; transform: translateY(-50%); }
     .axis-label-right  { top: 50%; right: 1rem; transform: translateY(-50%); }
 
-    /* Placement area border */
     .placement-area {
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 4000px;
-      height: 4000px;
+      left: 0; top: 0;
+      width: 4000px; height: 4000px;
       border: 2px dashed #ccc;
       border-radius: 12px;
       pointer-events: none;
     }
 
-    /* Items */
+    .origin {
+      position: absolute;
+      left: 1993px; top: 1993px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+
+    /* Items on canvas */
     .item {
       position: absolute;
       background: #fff;
@@ -97,25 +240,18 @@
       max-width: 260px;
       font-size: 0.9rem;
       line-height: 1.6;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      cursor: default;
+      transition: box-shadow 0.15s ease;
+      cursor: pointer;
     }
 
-    .item:hover {
-      transform: scale(1.03);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
+    .item:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
 
     .item.q-close-big   { border-left-color: #e67e22; }
     .item.q-far-big     { border-left-color: #8e44ad; }
     .item.q-close-small  { border-left-color: #27ae60; }
     .item.q-far-small   { border-left-color: #3498db; }
 
-    .item.done {
-      opacity: 0.6;
-      border-left-color: #aaa !important;
-      background: #f5f5f5;
-    }
+    .item.done { opacity: 0.6; border-left-color: #aaa !important; background: #f5f5f5; }
     .item.done .text { text-decoration: line-through; color: #999; }
     .item.done .done-badge {
       display: inline-block;
@@ -127,6 +263,12 @@
       margin-left: 0.4rem;
       font-weight: 600;
     }
+
+    .item.hidden { display: none; }
+    .item.highlight { box-shadow: 0 0 0 3px #e67e22, 0 4px 20px rgba(0,0,0,0.15); z-index: 10; }
+
+    .item .emoji { margin-right: 0.3rem; }
+    .item .date { font-size: 0.65rem; color: #bbb; margin-top: 0.3rem; }
 
     /* Detail popup */
     .detail-overlay {
@@ -150,80 +292,22 @@
       position: relative;
     }
 
-    .detail-popup h2 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.8rem;
-      line-height: 1.5;
-    }
-
-    .detail-popup .detail-meta {
-      font-size: 0.75rem;
-      color: #999;
-      margin-bottom: 1rem;
-    }
-
-    .detail-popup .detail-notes {
-      font-size: 0.85rem;
-      color: #555;
-      line-height: 1.7;
-      margin-bottom: 1rem;
-    }
-
-    .detail-popup .detail-links {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .detail-popup .detail-links a {
-      font-size: 0.85rem;
-      color: #3498db;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .detail-popup .detail-links a:hover {
-      text-decoration: underline;
-    }
+    .detail-popup h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem; line-height: 1.5; }
+    .detail-popup .detail-meta { font-size: 0.75rem; color: #999; margin-bottom: 1rem; }
+    .detail-popup .detail-notes { font-size: 0.85rem; color: #555; line-height: 1.7; margin-bottom: 1rem; }
+    .detail-popup .detail-links { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .detail-popup .detail-links a { font-size: 0.85rem; color: #3498db; text-decoration: none; display: flex; align-items: center; gap: 0.3rem; }
+    .detail-popup .detail-links a:hover { text-decoration: underline; }
 
     .detail-close {
       position: absolute;
-      top: 0.8rem;
-      right: 1rem;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: #aaa;
+      top: 0.8rem; right: 1rem;
+      background: none; border: none;
+      font-size: 1.2rem; cursor: pointer; color: #aaa;
     }
-
     .detail-close:hover { color: #333; }
 
-    .item { cursor: pointer; }
-
-    .item .emoji { margin-right: 0.3rem; }
-    .item .date {
-      font-size: 0.65rem;
-      color: #bbb;
-      margin-top: 0.3rem;
-    }
-
-    /* Center origin marker */
-    .origin {
-      position: absolute;
-      left: 1993px;
-      top: 1993px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #ddd;
-    }
-
-    /* Header overlay */
+    /* Header */
     #header {
       position: fixed;
       top: 1.5rem;
@@ -245,19 +329,13 @@
       backdrop-filter: blur(4px);
     }
 
-    #header p {
-      font-size: 0.75rem;
-      color: #aaa;
-      margin-top: 0.2rem;
-    }
+    #header p { font-size: 0.75rem; color: #aaa; margin-top: 0.2rem; }
 
     /* Minimap */
     #minimap {
       position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
-      width: 120px;
-      height: 120px;
+      bottom: 1.5rem; right: 1.5rem;
+      width: 120px; height: 120px;
       background: rgba(255,255,255,0.9);
       border: 1px solid #e0e0e0;
       border-radius: 8px;
@@ -266,35 +344,41 @@
       backdrop-filter: blur(4px);
     }
 
-    #minimap .mm-cross-h, #minimap .mm-cross-v {
-      position: absolute;
-      background: #e0e0e0;
-    }
+    #minimap .mm-cross-h, #minimap .mm-cross-v { position: absolute; background: #e0e0e0; }
     #minimap .mm-cross-h { width: 100%; height: 1px; top: 50%; }
     #minimap .mm-cross-v { height: 100%; width: 1px; left: 50%; }
-
-    #minimap .mm-viewport {
-      position: absolute;
-      border: 1.5px solid #e67e22;
-      border-radius: 2px;
-      opacity: 0.6;
-    }
-
-    #minimap .mm-dot {
-      position: absolute;
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: #666;
-    }
+    #minimap .mm-viewport { position: absolute; border: 1.5px solid #e67e22; border-radius: 2px; opacity: 0.6; }
+    #minimap .mm-dot { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #666; }
   </style>
 </head>
 <body>
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="sidebar-header">
+      <h2>📋 野望リスト</h2>
+      <p>クリックでジャンプ</p>
+    </div>
+    <div class="sidebar-filters">
+      <button class="filter-btn active" data-filter="all">すべて</button>
+      <button class="filter-btn" data-filter="active">進行中</button>
+      <button class="filter-btn" data-filter="done">達成済み</button>
+      <button class="filter-btn" data-filter="close-big">🔥</button>
+      <button class="filter-btn" data-filter="far-big">🌟</button>
+      <button class="filter-btn" data-filter="close-small">✨</button>
+      <button class="filter-btn" data-filter="far-small">💭</button>
+    </div>
+    <div class="sidebar-list" id="sidebar-list"></div>
+    <div class="sidebar-count" id="sidebar-count"></div>
+  </div>
+  <button id="sidebar-toggle" onclick="toggleSidebar()">◀</button>
+
+  <!-- Header -->
   <div id="header">
     <h1>Ambition Board</h1>
     <p>野望は、書き出した瞬間から動き出す</p>
   </div>
 
+  <!-- Canvas -->
   <div id="canvas">
     <div class="quad-bg quad-bg-close-big"></div>
     <div class="quad-bg quad-bg-far-big"></div>
@@ -304,17 +388,15 @@
     <div class="axis-line-v"></div>
     <div class="origin"></div>
     <div class="placement-area"></div>
-
-    <!-- axis labels moved to fixed overlay -->
-
-    <!-- quadrant labels removed -->
   </div>
 
+  <!-- Fixed axis labels -->
   <div class="axis-label axis-label-top">↑ 壮大な野望</div>
   <div class="axis-label axis-label-bottom">↓ 身近な望み</div>
   <div class="axis-label axis-label-left">← すぐ手を出せる</div>
   <div class="axis-label axis-label-right">いつかきっと →</div>
 
+  <!-- Minimap -->
   <div id="minimap">
     <div class="mm-cross-h"></div>
     <div class="mm-cross-v"></div>
@@ -326,20 +408,21 @@
     const CANVAS_SIZE = 4000;
     const CENTER = CANVAS_SIZE / 2;
 
-    // --- Pan & scroll ---
+    let allItems = [];
+    let itemPositions = {};
+    let currentFilter = 'all';
+
+    // --- Pan & Zoom ---
     let panX = -(CENTER - window.innerWidth / 2);
     let panY = -(CENTER - window.innerHeight / 2);
     let zoom = 1;
-    const ZOOM_MIN = 0.3;
-    const ZOOM_MAX = 2;
-    let isDragging = false;
-    let hasDragged = false;
+    const ZOOM_MIN = 0.3, ZOOM_MAX = 2;
+    let isDragging = false, hasDragged = false;
     let dragStartX, dragStartY;
 
     function applyTransform() {
       canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
       canvas.style.transformOrigin = '0 0';
-      // Counter-scale items so they stay the same visual size
       document.querySelectorAll('.item').forEach(el => {
         el.style.transform = `scale(${1 / zoom})`;
         el.style.transformOrigin = 'top left';
@@ -348,7 +431,7 @@
     }
 
     document.addEventListener('mousedown', (e) => {
-      if (e.target.closest('#minimap')) return;
+      if (e.target.closest('#minimap') || e.target.closest('#sidebar') || e.target.closest('#sidebar-toggle')) return;
       isDragging = true;
       hasDragged = false;
       dragStartX = e.clientX - panX;
@@ -369,14 +452,12 @@
       document.body.classList.remove('dragging');
     });
 
-    // Wheel zoom
     document.addEventListener('wheel', (e) => {
+      if (e.target.closest('#sidebar')) return;
       e.preventDefault();
       const delta = e.deltaY > 0 ? 0.9 : 1.1;
       const newZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoom * delta));
-      // Zoom toward cursor
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+      const mouseX = e.clientX, mouseY = e.clientY;
       const canvasX = (mouseX - panX) / zoom;
       const canvasY = (mouseY - panY) / zoom;
       zoom = newZoom;
@@ -385,15 +466,17 @@
       applyTransform();
     }, { passive: false });
 
-    // Touch support
+    // Touch
     let touchStartX, touchStartY;
     document.addEventListener('touchstart', (e) => {
+      if (e.target.closest('#sidebar')) return;
       if (e.touches.length === 1) {
         touchStartX = e.touches[0].clientX - panX;
         touchStartY = e.touches[0].clientY - panY;
       }
     });
     document.addEventListener('touchmove', (e) => {
+      if (e.target.closest('#sidebar')) return;
       if (e.touches.length === 1) {
         e.preventDefault();
         panX = e.touches[0].clientX - touchStartX;
@@ -406,28 +489,106 @@
     function updateMinimap() {
       const vp = document.getElementById('mm-viewport');
       const scale = 120 / CANVAS_SIZE;
-      const vw = window.innerWidth * scale;
-      const vh = window.innerHeight * scale;
-      const vx = -panX * scale;
-      const vy = -panY * scale;
-      vp.style.width = vw + 'px';
-      vp.style.height = vh + 'px';
-      vp.style.left = vx + 'px';
-      vp.style.top = vy + 'px';
+      vp.style.width = (window.innerWidth / zoom * scale) + 'px';
+      vp.style.height = (window.innerHeight / zoom * scale) + 'px';
+      vp.style.left = (-panX / zoom * scale) + 'px';
+      vp.style.top = (-panY / zoom * scale) + 'px';
     }
 
-    // --- Load items ---
-    async function loadAmbitions() {
-      try {
-        const res = await fetch('data/ambitions.json');
-        const data = await res.json();
-        renderItems(data);
-      } catch (e) {
-        console.error('Failed to load ambitions:', e);
+    // --- Sidebar ---
+    function toggleSidebar() {
+      const sb = document.getElementById('sidebar');
+      const btn = document.getElementById('sidebar-toggle');
+      sb.classList.toggle('collapsed');
+      btn.textContent = sb.classList.contains('collapsed') ? '▶' : '◀';
+    }
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        applyFilter();
+      });
+    });
+
+    function matchesFilter(item) {
+      if (currentFilter === 'all') return true;
+      if (currentFilter === 'active') return !item.doneAt;
+      if (currentFilter === 'done') return !!item.doneAt;
+      return item.quadrant === currentFilter;
+    }
+
+    function applyFilter() {
+      // Update canvas items visibility
+      document.querySelectorAll('.item').forEach(el => {
+        const id = parseInt(el.dataset.itemId);
+        const item = allItems.find(i => i.id === id);
+        if (item && matchesFilter(item)) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+
+      // Update sidebar list
+      renderSidebar();
+    }
+
+    function renderSidebar() {
+      const list = document.getElementById('sidebar-list');
+      const filtered = allItems.filter(matchesFilter);
+      const countEl = document.getElementById('sidebar-count');
+
+      list.innerHTML = filtered.map(item => {
+        const isDone = !!item.doneAt;
+        const doneDot = isDone ? '<span class="si-done-dot"></span>' : '';
+        const quadLabels = { 'close-big':'🔥','far-big':'🌟','close-small':'✨','far-small':'💭' };
+        return `
+          <div class="sidebar-item${isDone ? ' done' : ''}" data-id="${item.id}">
+            <span class="si-emoji">${item.emoji || ''}</span>
+            <div class="si-text">
+              <span class="si-name">${item.text}${doneDot}</span>
+              <div class="si-meta">${quadLabels[item.quadrant] || ''} ・ ${item.addedAt}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const doneCount = allItems.filter(i => !!i.doneAt).length;
+      countEl.textContent = `${filtered.length}件表示 / 全${allItems.length}件（達成: ${doneCount}）`;
+
+      // Click to jump
+      list.querySelectorAll('.sidebar-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = parseInt(el.dataset.id);
+          panToItem(id);
+        });
+      });
+    }
+
+    function panToItem(id) {
+      const pos = itemPositions[id];
+      if (!pos) return;
+
+      // Remove old highlights
+      document.querySelectorAll('.item.highlight').forEach(el => el.classList.remove('highlight'));
+
+      // Pan to center the item
+      panX = -(pos.x * zoom - window.innerWidth / 2);
+      panY = -(pos.y * zoom - window.innerHeight / 2);
+      applyTransform();
+
+      // Highlight
+      const el = document.querySelector(`.item[data-item-id="${id}"]`);
+      if (el) {
+        el.classList.add('highlight');
+        setTimeout(() => el.classList.remove('highlight'), 2000);
       }
     }
 
-    // Quadrant regions: map quadrant name to a region around center
+    // --- Data ---
     const QUADRANT_REGIONS = {
       'close-big':  { xMin: -1800, xMax: -100, yMin: -1800, yMax: -100 },
       'far-big':    { xMin: 100,   xMax: 1800, yMin: -1800, yMax: -100 },
@@ -446,11 +607,20 @@
       };
     }
 
+    async function loadAmbitions() {
+      try {
+        const res = await fetch('data/ambitions.json');
+        allItems = await res.json();
+        renderItems(allItems);
+        renderSidebar();
+      } catch (e) {
+        console.error('Failed to load ambitions:', e);
+      }
+    }
+
     function renderItems(items) {
-      // Remove old items
       document.querySelectorAll('.item').forEach(el => el.remove());
       document.querySelectorAll('.mm-dot').forEach(el => el.remove());
-
       const minimap = document.getElementById('minimap');
 
       items.forEach(item => {
@@ -460,10 +630,12 @@
         const rng = seededRandom(item.text + item.id);
         const x = CENTER + region.xMin + rng() * (region.xMax - region.xMin);
         const y = CENTER + region.yMin + rng() * (region.yMax - region.yMin);
+        itemPositions[item.id] = { x, y };
 
         const el = document.createElement('div');
         const isDone = !!item.doneAt;
         el.className = `item q-${item.quadrant}${isDone ? ' done' : ''}`;
+        el.dataset.itemId = item.id;
         el.style.left = x + 'px';
         el.style.top = y + 'px';
         const badge = isDone ? '<span class="done-badge">✓ DONE</span>' : '';
@@ -478,7 +650,6 @@
         });
         canvas.appendChild(el);
 
-        // Minimap dot
         const dot = document.createElement('div');
         dot.className = 'mm-dot';
         dot.style.left = (x / CANVAS_SIZE * 120) + 'px';
@@ -488,7 +659,6 @@
     }
 
     function showDetail(item) {
-      // Remove existing
       document.querySelectorAll('.detail-overlay').forEach(el => el.remove());
 
       const overlay = document.createElement('div');
@@ -496,23 +666,17 @@
 
       const statusText = item.doneAt ? `達成: ${item.doneAt}` : '進行中';
       const quadrantNames = {
-        'close-big': '🔥 壮大 × すぐ',
-        'far-big': '🌟 壮大 × いつか',
-        'close-small': '✨ 身近 × すぐ',
-        'far-small': '💭 身近 × いつか'
+        'close-big': '🔥 壮大 × すぐ', 'far-big': '🌟 壮大 × いつか',
+        'close-small': '✨ 身近 × すぐ', 'far-small': '💭 身近 × いつか'
       };
 
       let linksHtml = '';
       if (item.links && item.links.length > 0) {
         linksHtml = '<ul class="detail-links">' +
-          item.links.map(l => `<li><a href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label || l.url}</a></li>`).join('') +
-          '</ul>';
+          item.links.map(l => `<li><a href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label || l.url}</a></li>`).join('') + '</ul>';
       }
 
-      let notesHtml = '';
-      if (item.notes) {
-        notesHtml = `<div class="detail-notes">${item.notes}</div>`;
-      }
+      let notesHtml = item.notes ? `<div class="detail-notes">${item.notes}</div>` : '';
 
       overlay.innerHTML = `
         <div class="detail-popup">
@@ -524,11 +688,8 @@
         </div>
       `;
 
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.remove();
-      });
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
       overlay.querySelector('.detail-close').addEventListener('click', () => overlay.remove());
-
       document.body.appendChild(overlay);
     }
 
