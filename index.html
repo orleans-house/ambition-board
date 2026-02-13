@@ -237,7 +237,7 @@
       padding: 0.8rem 1.1rem;
       box-shadow: 0 2px 12px rgba(0,0,0,0.06);
       border-left: 3px solid #ddd;
-      max-width: 260px;
+      width: 220px;
       font-size: 0.9rem;
       line-height: 1.6;
       transition: box-shadow 0.15s ease;
@@ -389,6 +389,15 @@
     }
     .item.done .item-progress-fill {
       background: linear-gradient(90deg, #f0c040, #e6a800);
+    }
+
+    .item .text {
+      display: inline-block;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: bottom;
     }
 
     .item .emoji { margin-right: 0.3rem; }
