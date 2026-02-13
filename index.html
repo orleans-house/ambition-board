@@ -32,13 +32,13 @@
     /* Quadrant backgrounds */
     .quad-bg {
       position: absolute;
-      width: 1000px;
-      height: 1000px;
+      width: 10000px;
+      height: 10000px;
     }
-    .quad-bg-close-big  { left: 0;    top: 0;    background: rgba(230, 126, 34, 0.07); }
-    .quad-bg-far-big    { left: 1000px; top: 0;    background: rgba(142, 68, 173, 0.07); }
-    .quad-bg-close-small { left: 0;    top: 1000px; background: rgba(39, 174, 96, 0.07); }
-    .quad-bg-far-small  { left: 1000px; top: 1000px; background: rgba(52, 152, 219, 0.07); }
+    .quad-bg-close-big  { left: -9000px; top: -9000px;  background: rgba(230, 126, 34, 0.07); }
+    .quad-bg-far-big    { left: 1000px;  top: -9000px;  background: rgba(142, 68, 173, 0.07); }
+    .quad-bg-close-small { left: -9000px; top: 1000px;   background: rgba(39, 174, 96, 0.07); }
+    .quad-bg-far-small  { left: 1000px;  top: 1000px;   background: rgba(52, 152, 219, 0.07); }
 
     .axis-line-h, .axis-line-v {
       position: absolute;
@@ -74,20 +74,7 @@
     .axis-label-left   { top: 50%; left: 1rem; transform: translateY(-50%); }
     .axis-label-right  { top: 50%; right: 1rem; transform: translateY(-50%); }
 
-    /* Quadrant background labels */
-    .quadrant-label {
-      position: absolute;
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .ql-close-big  { left: 350px;  top: 350px;  color: #e67e22; }
-    .ql-far-big    { left: 1200px; top: 350px;  color: #8e44ad; }
-    .ql-close-small { left: 350px;  top: 1200px; color: #27ae60; }
-    .ql-far-small  { left: 1200px; top: 1200px; color: #3498db; }
+    /* Quadrant labels removed */
 
     /* Items */
     .item {
@@ -232,10 +219,7 @@
 
     <!-- axis labels moved to fixed overlay -->
 
-    <div class="quadrant-label ql-close-big">🔥 今すぐ動け</div>
-    <div class="quadrant-label ql-far-big">🌟 星に手を伸ばせ</div>
-    <div class="quadrant-label ql-close-small">✨ サクッとやろう</div>
-    <div class="quadrant-label ql-far-small">💭 あたためておく</div>
+    <!-- quadrant labels removed -->
   </div>
 
   <div class="axis-label axis-label-top">↑ 壮大な野望</div>
