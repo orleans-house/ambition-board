@@ -29,9 +29,20 @@
     }
 
     /* Grid lines */
+    /* Quadrant backgrounds */
+    .quad-bg {
+      position: absolute;
+      width: 1000px;
+      height: 1000px;
+    }
+    .quad-bg-close-big  { left: 0;    top: 0;    background: rgba(230, 126, 34, 0.04); }
+    .quad-bg-far-big    { left: 1000px; top: 0;    background: rgba(142, 68, 173, 0.04); }
+    .quad-bg-close-small { left: 0;    top: 1000px; background: rgba(39, 174, 96, 0.04); }
+    .quad-bg-far-small  { left: 1000px; top: 1000px; background: rgba(52, 152, 219, 0.04); }
+
     .axis-line-h, .axis-line-v {
       position: absolute;
-      background: #e8e8e8;
+      background: #e0e0e0;
     }
     .axis-line-h {
       width: 100%;
@@ -194,6 +205,10 @@
   </div>
 
   <div id="canvas">
+    <div class="quad-bg quad-bg-close-big"></div>
+    <div class="quad-bg quad-bg-far-big"></div>
+    <div class="quad-bg quad-bg-close-small"></div>
+    <div class="quad-bg quad-bg-far-small"></div>
     <div class="axis-line-h"></div>
     <div class="axis-line-v"></div>
     <div class="origin"></div>
