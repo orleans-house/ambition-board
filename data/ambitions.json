@@ -48,11 +48,12 @@
     "text": "Final Fantasy XIV 零式",
     "quadrant": "close-big",
     "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
     "emoji": "⚔️",
     "milestones": [
-      { "text": "L級: 初週クリア", "done": false },
-      { "text": "C級: 初週クリア", "done": false },
-      { "text": "H級: 3週以内クリア", "done": false }
+      { "text": "L級: 初週クリア → 5日", "done": true },
+      { "text": "C級: 初週クリア → 7日", "done": true },
+      { "text": "H級: 3週以内クリア → 20日", "done": true }
     ]
   },
   {
