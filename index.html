@@ -225,11 +225,20 @@
     // --- Pan & scroll ---
     let panX = -(CENTER - window.innerWidth / 2);
     let panY = -(CENTER - window.innerHeight / 2);
+    let zoom = 1;
+    const ZOOM_MIN = 0.3;
+    const ZOOM_MAX = 2;
     let isDragging = false;
     let dragStartX, dragStartY;
 
-    function applyPan() {
-      canvas.style.transform = `translate(${panX}px, ${panY}px)`;
+    function applyTransform() {
+      canvas.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+      canvas.style.transformOrigin = '0 0';
+      // Counter-scale items so they stay the same visual size
+      document.querySelectorAll('.item').forEach(el => {
+        el.style.transform = `scale(${1 / zoom})`;
+        el.style.transformOrigin = 'top left';
+      });
       updateMinimap();
     }
 
@@ -245,13 +254,29 @@
       if (!isDragging) return;
       panX = e.clientX - dragStartX;
       panY = e.clientY - dragStartY;
-      applyPan();
+      applyTransform();
     });
 
     document.addEventListener('mouseup', () => {
       isDragging = false;
       document.body.classList.remove('dragging');
     });
+
+    // Wheel zoom
+    document.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.9 : 1.1;
+      const newZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoom * delta));
+      // Zoom toward cursor
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      const canvasX = (mouseX - panX) / zoom;
+      const canvasY = (mouseY - panY) / zoom;
+      zoom = newZoom;
+      panX = mouseX - canvasX * zoom;
+      panY = mouseY - canvasY * zoom;
+      applyTransform();
+    }, { passive: false });
 
     // Touch support
     let touchStartX, touchStartY;
@@ -266,7 +291,7 @@
         e.preventDefault();
         panX = e.touches[0].clientX - touchStartX;
         panY = e.touches[0].clientY - touchStartY;
-        applyPan();
+        applyTransform();
       }
     }, { passive: false });
 
@@ -348,7 +373,7 @@
       });
     }
 
-    applyPan();
+    applyTransform();
     loadAmbitions();
   </script>
 </body>
