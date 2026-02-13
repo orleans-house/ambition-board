@@ -19,7 +19,8 @@
     "text": "Claude Codeの利用方法の実践",
     "quadrant": "close-small",
     "addedAt": "2026-02-13",
-    "emoji": "📖"
+    "emoji": "📖",
+    "links": [{"label": "How I Use Claude Code", "url": "https://boristane.com/blog/how-i-use-claude-code/"}]
   },
   {
     "id": 4,

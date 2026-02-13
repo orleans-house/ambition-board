@@ -118,6 +118,83 @@
       font-weight: 600;
     }
 
+    /* Detail popup */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .detail-popup {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 420px;
+      width: 90vw;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    .detail-popup h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .detail-popup .detail-meta {
+      font-size: 0.75rem;
+      color: #999;
+      margin-bottom: 1rem;
+    }
+
+    .detail-popup .detail-notes {
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .detail-popup .detail-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .detail-popup .detail-links a {
+      font-size: 0.85rem;
+      color: #3498db;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .detail-popup .detail-links a:hover {
+      text-decoration: underline;
+    }
+
+    .detail-close {
+      position: absolute;
+      top: 0.8rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .detail-close:hover { color: #333; }
+
+    .item { cursor: pointer; }
+
     .item .emoji { margin-right: 0.3rem; }
     .item .date {
       font-size: 0.65rem;
@@ -245,6 +322,7 @@
     const ZOOM_MIN = 0.3;
     const ZOOM_MAX = 2;
     let isDragging = false;
+    let hasDragged = false;
     let dragStartX, dragStartY;
 
     function applyTransform() {
@@ -261,6 +339,7 @@
     document.addEventListener('mousedown', (e) => {
       if (e.target.closest('#minimap')) return;
       isDragging = true;
+      hasDragged = false;
       dragStartX = e.clientX - panX;
       dragStartY = e.clientY - panY;
       document.body.classList.add('dragging');
@@ -268,6 +347,7 @@
 
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
+      hasDragged = true;
       panX = e.clientX - dragStartX;
       panY = e.clientY - dragStartY;
       applyTransform();
@@ -380,6 +460,11 @@
           <span class="emoji">${item.emoji || ''}</span><span class="text">${item.text}</span>${badge}
           <div class="date">${item.addedAt}${isDone ? ' → ' + item.doneAt : ''}</div>
         `;
+        el.addEventListener('click', (e) => {
+          if (hasDragged) return;
+          e.stopPropagation();
+          showDetail(item);
+        });
         canvas.appendChild(el);
 
         // Minimap dot
@@ -389,6 +474,51 @@
         dot.style.top = (y / CANVAS_SIZE * 120) + 'px';
         minimap.appendChild(dot);
       });
+    }
+
+    function showDetail(item) {
+      // Remove existing
+      document.querySelectorAll('.detail-overlay').forEach(el => el.remove());
+
+      const overlay = document.createElement('div');
+      overlay.className = 'detail-overlay';
+
+      const statusText = item.doneAt ? `達成: ${item.doneAt}` : '進行中';
+      const quadrantNames = {
+        'close-big': '🔥 壮大 × すぐ',
+        'far-big': '🌟 壮大 × いつか',
+        'close-small': '✨ 身近 × すぐ',
+        'far-small': '💭 身近 × いつか'
+      };
+
+      let linksHtml = '';
+      if (item.links && item.links.length > 0) {
+        linksHtml = '<ul class="detail-links">' +
+          item.links.map(l => `<li><a href="${l.url}" target="_blank" rel="noopener">🔗 ${l.label || l.url}</a></li>`).join('') +
+          '</ul>';
+      }
+
+      let notesHtml = '';
+      if (item.notes) {
+        notesHtml = `<div class="detail-notes">${item.notes}</div>`;
+      }
+
+      overlay.innerHTML = `
+        <div class="detail-popup">
+          <button class="detail-close">✕</button>
+          <h2>${item.emoji || ''} ${item.text}</h2>
+          <div class="detail-meta">${quadrantNames[item.quadrant] || ''} ・ 追加: ${item.addedAt} ・ ${statusText}</div>
+          ${notesHtml}
+          ${linksHtml}
+        </div>
+      `;
+
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+      });
+      overlay.querySelector('.detail-close').addEventListener('click', () => overlay.remove());
+
+      document.body.appendChild(overlay);
     }
 
     applyTransform();
