@@ -44,6 +44,18 @@
     "emoji": "🛠️"
   },
   {
+    "id": 9,
+    "text": "Final Fantasy XIV 零式",
+    "quadrant": "close-big",
+    "addedAt": "2026-02-13",
+    "emoji": "⚔️",
+    "milestones": [
+      { "text": "L級: 初週クリア", "done": false },
+      { "text": "C級: 初週クリア", "done": false },
+      { "text": "H級: 3週以内クリア", "done": false }
+    ]
+  },
+  {
     "id": 7,
     "text": "beatmania IIDX 皆伝",
     "quadrant": "far-big",

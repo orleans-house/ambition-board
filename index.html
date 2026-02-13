@@ -295,6 +295,61 @@
     .detail-popup h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.8rem; line-height: 1.5; }
     .detail-popup .detail-meta { font-size: 0.75rem; color: #999; margin-bottom: 1rem; }
     .detail-popup .detail-notes { font-size: 0.85rem; color: #555; line-height: 1.7; margin-bottom: 1rem; }
+    .detail-popup .detail-milestones {
+      list-style: none;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .detail-popup .detail-milestones li {
+      font-size: 0.85rem;
+      padding: 0.4rem 0.6rem;
+      background: #f8f8f8;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .detail-popup .detail-milestones li .ms-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+    }
+    .detail-popup .detail-milestones li.ms-done .ms-check {
+      background: #27ae60;
+      border-color: #27ae60;
+      color: #fff;
+    }
+    .detail-popup .detail-milestones li.ms-done .ms-text {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+    .detail-popup .ms-progress {
+      font-size: 0.7rem;
+      color: #999;
+      margin-bottom: 0.6rem;
+    }
+    .detail-popup .ms-bar {
+      height: 4px;
+      background: #eee;
+      border-radius: 2px;
+      margin-bottom: 0.8rem;
+      overflow: hidden;
+    }
+    .detail-popup .ms-bar-fill {
+      height: 100%;
+      background: #27ae60;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
     .detail-popup .detail-links { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
     .detail-popup .detail-links a { font-size: 0.85rem; color: #3498db; text-decoration: none; display: flex; align-items: center; gap: 0.3rem; }
     .detail-popup .detail-links a:hover { text-decoration: underline; }
@@ -545,12 +600,17 @@
         const isDone = !!item.doneAt;
         const doneDot = isDone ? '<span class="si-done-dot"></span>' : '';
         const quadLabels = { 'close-big':'🔥','far-big':'🌟','close-small':'✨','far-small':'💭' };
+        let msInfo = '';
+        if (item.milestones && item.milestones.length > 0) {
+          const mc = item.milestones.filter(m => m.done).length;
+          msInfo = ` ・ ${mc}/${item.milestones.length}`;
+        }
         return `
           <div class="sidebar-item${isDone ? ' done' : ''}" data-id="${item.id}">
             <span class="si-emoji">${item.emoji || ''}</span>
             <div class="si-text">
               <span class="si-name">${item.text}${doneDot}</span>
-              <div class="si-meta">${quadLabels[item.quadrant] || ''} ・ ${item.addedAt}</div>
+              <div class="si-meta">${quadLabels[item.quadrant] || ''} ・ ${item.addedAt}${msInfo}</div>
             </div>
           </div>
         `;
@@ -678,12 +738,32 @@
 
       let notesHtml = item.notes ? `<div class="detail-notes">${item.notes}</div>` : '';
 
+      let milestonesHtml = '';
+      if (item.milestones && item.milestones.length > 0) {
+        const doneCount = item.milestones.filter(m => m.done).length;
+        const total = item.milestones.length;
+        const pct = Math.round((doneCount / total) * 100);
+        milestonesHtml = `
+          <div class="ms-progress">${doneCount} / ${total} 達成 (${pct}%)</div>
+          <div class="ms-bar"><div class="ms-bar-fill" style="width:${pct}%"></div></div>
+          <ul class="detail-milestones">
+            ${item.milestones.map(m => `
+              <li class="${m.done ? 'ms-done' : ''}">
+                <span class="ms-check">${m.done ? '✓' : ''}</span>
+                <span class="ms-text">${m.text}</span>
+              </li>
+            `).join('')}
+          </ul>
+        `;
+      }
+
       overlay.innerHTML = `
         <div class="detail-popup">
           <button class="detail-close">✕</button>
           <h2>${item.emoji || ''} ${item.text}</h2>
           <div class="detail-meta">${quadrantNames[item.quadrant] || ''} ・ 追加: ${item.addedAt} ・ ${statusText}</div>
           ${notesHtml}
+          ${milestonesHtml}
           ${linksHtml}
         </div>
       `;
