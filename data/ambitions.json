@@ -5,5 +5,40 @@
     "quadrant": "close-big",
     "addedAt": "2026-02-13",
     "emoji": "🔥"
+  },
+  {
+    "id": 2,
+    "text": "GuitarFreaks 虹ネーム到達",
+    "quadrant": "far-big",
+    "addedAt": "2026-02-13",
+    "emoji": "🎸"
+  },
+  {
+    "id": 3,
+    "text": "Claude Codeの利用方法の実践",
+    "quadrant": "close-small",
+    "addedAt": "2026-02-13",
+    "emoji": "📖"
+  },
+  {
+    "id": 4,
+    "text": "東方整数作品 ALL NNC",
+    "quadrant": "close-big",
+    "addedAt": "2026-02-13",
+    "emoji": "🎮"
+  },
+  {
+    "id": 5,
+    "text": "東方整数作品 ALL ExNC",
+    "quadrant": "far-big",
+    "addedAt": "2026-02-13",
+    "emoji": "💀"
+  },
+  {
+    "id": 6,
+    "text": "Claude Code + Bedrockでの開発環境整備",
+    "quadrant": "close-small",
+    "addedAt": "2026-02-13",
+    "emoji": "🛠️"
   }
 ]
