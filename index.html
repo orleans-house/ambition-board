@@ -951,12 +951,30 @@
           <div class="export-actions">
             <button class="btn-close" onclick="this.closest('.export-overlay').remove()">閉じる</button>
             <button class="btn-copy" onclick="copyExport(this)">📋 コピー</button>
+            <button class="btn-copy" onclick="downloadExport()">💾 ダウンロード</button>
           </div>
         </div>
       `;
 
       overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
       document.body.appendChild(overlay);
+    }
+
+    function downloadExport() {
+      const exportData = allItems.map(item => {
+        const pos = itemPositions[item.id];
+        const out = { ...item };
+        if (pos) { out.x = Math.round(pos.x); out.y = Math.round(pos.y); }
+        return out;
+      });
+      const json = JSON.stringify(exportData, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ambitions.json';
+      a.click();
+      URL.revokeObjectURL(url);
     }
 
     function copyExport(btn) {
