@@ -24,8 +24,8 @@
 
     #canvas {
       position: absolute;
-      width: 4000px;
-      height: 4000px;
+      width: 2000px;
+      height: 2000px;
     }
 
     /* Grid lines */
@@ -36,13 +36,13 @@
     .axis-line-h {
       width: 100%;
       height: 1px;
-      top: 2000px;
+      top: 1000px;
       left: 0;
     }
     .axis-line-v {
       height: 100%;
       width: 1px;
-      left: 2000px;
+      left: 1000px;
       top: 0;
     }
 
@@ -56,10 +56,10 @@
       white-space: nowrap;
     }
 
-    .axis-label-top    { left: 2000px; top: 40px; transform: translateX(-50%); }
-    .axis-label-bottom { left: 2000px; bottom: 40px; transform: translateX(-50%); }
-    .axis-label-left   { top: 2000px; left: 40px; transform: translateY(-50%); }
-    .axis-label-right  { top: 2000px; right: 40px; transform: translateY(-50%); }
+    .axis-label-top    { left: 1000px; top: 40px; transform: translateX(-50%); }
+    .axis-label-bottom { left: 1000px; bottom: 40px; transform: translateX(-50%); }
+    .axis-label-left   { top: 1000px; left: 40px; transform: translateY(-50%); }
+    .axis-label-right  { top: 1000px; right: 40px; transform: translateY(-50%); }
 
     /* Quadrant background labels */
     .quadrant-label {
@@ -71,10 +71,10 @@
       pointer-events: none;
     }
 
-    .ql-close-big  { left: 700px;  top: 700px;  color: #e67e22; }
-    .ql-far-big    { left: 2400px; top: 700px;  color: #8e44ad; }
-    .ql-close-small { left: 700px;  top: 2400px; color: #27ae60; }
-    .ql-far-small  { left: 2400px; top: 2400px; color: #3498db; }
+    .ql-close-big  { left: 350px;  top: 350px;  color: #e67e22; }
+    .ql-far-big    { left: 1200px; top: 350px;  color: #8e44ad; }
+    .ql-close-small { left: 350px;  top: 1200px; color: #27ae60; }
+    .ql-far-small  { left: 1200px; top: 1200px; color: #3498db; }
 
     /* Items */
     .item {
@@ -111,8 +111,8 @@
     /* Center origin marker */
     .origin {
       position: absolute;
-      left: 1993px;
-      top: 1993px;
+      left: 993px;
+      top: 993px;
       width: 14px;
       height: 14px;
       border-radius: 50%;
@@ -215,7 +215,7 @@
 
   <script>
     const canvas = document.getElementById('canvas');
-    const CANVAS_SIZE = 4000;
+    const CANVAS_SIZE = 2000;
     const CENTER = CANVAS_SIZE / 2;
 
     // --- Pan & scroll ---
@@ -293,10 +293,10 @@
 
     // Quadrant regions: map quadrant name to a region around center
     const QUADRANT_REGIONS = {
-      'close-big':  { xMin: -800, xMax: -100, yMin: -800, yMax: -100 },
-      'far-big':    { xMin: 100,  xMax: 800,  yMin: -800, yMax: -100 },
-      'close-small': { xMin: -800, xMax: -100, yMin: 100,  yMax: 800 },
-      'far-small':  { xMin: 100,  xMax: 800,  yMin: 100,  yMax: 800 },
+      'close-big':  { xMin: -400, xMax: -50, yMin: -400, yMax: -50 },
+      'far-big':    { xMin: 50,   xMax: 400, yMin: -400, yMax: -50 },
+      'close-small': { xMin: -400, xMax: -50, yMin: 50,   yMax: 400 },
+      'far-small':  { xMin: 50,   xMax: 400, yMin: 50,   yMax: 400 },
     };
 
     function seededRandom(seed) {
