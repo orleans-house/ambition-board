@@ -13,190 +13,274 @@
       font-family: 'Noto Sans JP', sans-serif;
       background: #fafafa;
       color: #333;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    header h1 {
-      font-weight: 300;
-      font-size: 1.8rem;
-      letter-spacing: 0.1em;
-      color: #222;
-    }
-
-    header p {
-      font-size: 0.85rem;
-      color: #999;
-      margin-top: 0.3rem;
-    }
-
-    .board {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 2px;
-      width: min(90vw, 800px);
-      height: min(80vh, 700px);
-      background: #e0e0e0;
-      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      height: 100vh;
+      width: 100vw;
+      cursor: grab;
+      user-select: none;
     }
 
-    .quadrant {
-      background: #fff;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow-y: auto;
+    body.dragging { cursor: grabbing; }
+
+    #canvas {
+      position: absolute;
+      width: 4000px;
+      height: 4000px;
     }
 
-    .quadrant-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: #bbb;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+    /* Grid lines */
+    .axis-line-h, .axis-line-v {
+      position: absolute;
+      background: #e8e8e8;
     }
-
-    .quadrant-label .icon {
-      font-size: 1rem;
+    .axis-line-h {
+      width: 100%;
+      height: 1px;
+      top: 2000px;
+      left: 0;
     }
-
-    /* Top-left: 壮大 × すぐ */
-    .q-close-big { border-radius: 12px 0 0 0; }
-    .q-close-big .quadrant-label { color: #e67e22; }
-
-    /* Top-right: 壮大 × いつか */
-    .q-far-big { border-radius: 0 12px 0 0; }
-    .q-far-big .quadrant-label { color: #8e44ad; }
-
-    /* Bottom-left: 身近 × すぐ */
-    .q-close-small { border-radius: 0 0 0 12px; }
-    .q-close-small .quadrant-label { color: #27ae60; }
-
-    /* Bottom-right: 身近 × いつか */
-    .q-far-small { border-radius: 0 0 12px 0; }
-    .q-far-small .quadrant-label { color: #3498db; }
-
-    .items {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .item {
-      font-size: 0.9rem;
-      font-weight: 400;
-      padding: 0.6rem 0.8rem;
-      background: #f8f8f8;
-      border-radius: 8px;
-      border-left: 3px solid transparent;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      line-height: 1.5;
-    }
-
-    .item:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-
-    .q-close-big .item  { border-left-color: #e67e22; }
-    .q-far-big .item    { border-left-color: #8e44ad; }
-    .q-close-small .item { border-left-color: #27ae60; }
-    .q-far-small .item  { border-left-color: #3498db; }
-
-    .item .emoji {
-      margin-right: 0.3rem;
-    }
-
-    .item .date {
-      font-size: 0.7rem;
-      color: #bbb;
-      margin-top: 0.2rem;
+    .axis-line-v {
+      height: 100%;
+      width: 1px;
+      left: 2000px;
+      top: 0;
     }
 
     /* Axis labels */
-    .axis-x, .axis-y {
-      position: fixed;
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      color: #ccc;
-    }
-
-    .board-container {
-      position: relative;
-    }
-
     .axis-label {
       position: absolute;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       font-weight: 300;
-      color: #bbb;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.2em;
+      color: #ccc;
+      white-space: nowrap;
     }
 
-    .axis-top    { top: -1.5rem; left: 50%; transform: translateX(-50%); }
-    .axis-bottom { bottom: -1.5rem; left: 50%; transform: translateX(-50%); }
-    .axis-left   { left: -3.5rem; top: 50%; transform: translateY(-50%) rotate(-90deg); }
-    .axis-right  { right: -3.5rem; top: 50%; transform: translateY(-50%) rotate(90deg); }
+    .axis-label-top    { left: 2000px; top: 40px; transform: translateX(-50%); }
+    .axis-label-bottom { left: 2000px; bottom: 40px; transform: translateX(-50%); }
+    .axis-label-left   { top: 2000px; left: 40px; transform: translateY(-50%); }
+    .axis-label-right  { top: 2000px; right: 40px; transform: translateY(-50%); }
 
-    .empty-hint {
-      font-size: 0.8rem;
-      color: #ddd;
-      font-style: italic;
-      margin-top: 1rem;
+    /* Quadrant background labels */
+    .quadrant-label {
+      position: absolute;
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .ql-close-big  { left: 700px;  top: 700px;  color: #e67e22; }
+    .ql-far-big    { left: 2400px; top: 700px;  color: #8e44ad; }
+    .ql-close-small { left: 700px;  top: 2400px; color: #27ae60; }
+    .ql-far-small  { left: 2400px; top: 2400px; color: #3498db; }
+
+    /* Items */
+    .item {
+      position: absolute;
+      background: #fff;
+      border-radius: 10px;
+      padding: 0.8rem 1.1rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border-left: 3px solid #ddd;
+      max-width: 260px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: default;
+    }
+
+    .item:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .item.q-close-big   { border-left-color: #e67e22; }
+    .item.q-far-big     { border-left-color: #8e44ad; }
+    .item.q-close-small  { border-left-color: #27ae60; }
+    .item.q-far-small   { border-left-color: #3498db; }
+
+    .item .emoji { margin-right: 0.3rem; }
+    .item .date {
+      font-size: 0.65rem;
+      color: #bbb;
+      margin-top: 0.3rem;
+    }
+
+    /* Center origin marker */
+    .origin {
+      position: absolute;
+      left: 1993px;
+      top: 1993px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+
+    /* Header overlay */
+    #header {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    #header h1 {
+      font-weight: 300;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      color: #222;
+      background: rgba(250,250,250,0.85);
+      padding: 0.3rem 1.2rem;
+      border-radius: 8px;
+      backdrop-filter: blur(4px);
+    }
+
+    #header p {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-top: 0.2rem;
+    }
+
+    /* Minimap */
+    #minimap {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 120px;
+      height: 120px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      z-index: 100;
+      overflow: hidden;
+      backdrop-filter: blur(4px);
+    }
+
+    #minimap .mm-cross-h, #minimap .mm-cross-v {
+      position: absolute;
+      background: #e0e0e0;
+    }
+    #minimap .mm-cross-h { width: 100%; height: 1px; top: 50%; }
+    #minimap .mm-cross-v { height: 100%; width: 1px; left: 50%; }
+
+    #minimap .mm-viewport {
+      position: absolute;
+      border: 1.5px solid #e67e22;
+      border-radius: 2px;
+      opacity: 0.6;
+    }
+
+    #minimap .mm-dot {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #666;
     }
   </style>
 </head>
 <body>
-  <header>
+  <div id="header">
     <h1>Ambition Board</h1>
     <p>野望は、書き出した瞬間から動き出す</p>
-  </header>
+  </div>
 
-  <div class="board-container">
-    <span class="axis-label axis-top">壮大な野望 ↑</span>
-    <span class="axis-bottom axis-label">身近な望み ↓</span>
-    <span class="axis-label axis-left">← すぐ手を出せる</span>
-    <span class="axis-label axis-right">← いつかきっと</span>
+  <div id="canvas">
+    <div class="axis-line-h"></div>
+    <div class="axis-line-v"></div>
+    <div class="origin"></div>
 
-    <div class="board">
-      <div class="quadrant q-close-big" data-quadrant="close-big">
-        <div class="quadrant-label"><span class="icon">🔥</span> 今すぐ動け</div>
-        <ul class="items"></ul>
-      </div>
-      <div class="quadrant q-far-big" data-quadrant="far-big">
-        <div class="quadrant-label"><span class="icon">🌟</span> 星に手を伸ばせ</div>
-        <ul class="items"></ul>
-      </div>
-      <div class="quadrant q-close-small" data-quadrant="close-small">
-        <div class="quadrant-label"><span class="icon">✨</span> サクッとやろう</div>
-        <ul class="items"></ul>
-      </div>
-      <div class="quadrant q-far-small" data-quadrant="far-small">
-        <div class="quadrant-label"><span class="icon">💭</span> あたためておく</div>
-        <ul class="items"></ul>
-      </div>
-    </div>
+    <div class="axis-label axis-label-top">↑ 壮大な野望</div>
+    <div class="axis-label axis-label-bottom">↓ 身近な望み</div>
+    <div class="axis-label axis-label-left">← すぐ手を出せる</div>
+    <div class="axis-label axis-label-right">いつかきっと →</div>
+
+    <div class="quadrant-label ql-close-big">🔥 今すぐ動け</div>
+    <div class="quadrant-label ql-far-big">🌟 星に手を伸ばせ</div>
+    <div class="quadrant-label ql-close-small">✨ サクッとやろう</div>
+    <div class="quadrant-label ql-far-small">💭 あたためておく</div>
+  </div>
+
+  <div id="minimap">
+    <div class="mm-cross-h"></div>
+    <div class="mm-cross-v"></div>
+    <div class="mm-viewport" id="mm-viewport"></div>
   </div>
 
   <script>
+    const canvas = document.getElementById('canvas');
+    const CANVAS_SIZE = 4000;
+    const CENTER = CANVAS_SIZE / 2;
+
+    // --- Pan & scroll ---
+    let panX = -(CENTER - window.innerWidth / 2);
+    let panY = -(CENTER - window.innerHeight / 2);
+    let isDragging = false;
+    let dragStartX, dragStartY;
+
+    function applyPan() {
+      canvas.style.transform = `translate(${panX}px, ${panY}px)`;
+      updateMinimap();
+    }
+
+    document.addEventListener('mousedown', (e) => {
+      if (e.target.closest('#minimap')) return;
+      isDragging = true;
+      dragStartX = e.clientX - panX;
+      dragStartY = e.clientY - panY;
+      document.body.classList.add('dragging');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      panX = e.clientX - dragStartX;
+      panY = e.clientY - dragStartY;
+      applyPan();
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      document.body.classList.remove('dragging');
+    });
+
+    // Touch support
+    let touchStartX, touchStartY;
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX - panX;
+        touchStartY = e.touches[0].clientY - panY;
+      }
+    });
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 1) {
+        e.preventDefault();
+        panX = e.touches[0].clientX - touchStartX;
+        panY = e.touches[0].clientY - touchStartY;
+        applyPan();
+      }
+    }, { passive: false });
+
+    // --- Minimap ---
+    function updateMinimap() {
+      const vp = document.getElementById('mm-viewport');
+      const scale = 120 / CANVAS_SIZE;
+      const vw = window.innerWidth * scale;
+      const vh = window.innerHeight * scale;
+      const vx = -panX * scale;
+      const vy = -panY * scale;
+      vp.style.width = vw + 'px';
+      vp.style.height = vh + 'px';
+      vp.style.left = vx + 'px';
+      vp.style.top = vy + 'px';
+    }
+
+    // --- Load items ---
     async function loadAmbitions() {
       try {
         const res = await fetch('data/ambitions.json');
@@ -207,32 +291,60 @@
       }
     }
 
+    // Quadrant regions: map quadrant name to a region around center
+    const QUADRANT_REGIONS = {
+      'close-big':  { xMin: -800, xMax: -100, yMin: -800, yMax: -100 },
+      'far-big':    { xMin: 100,  xMax: 800,  yMin: -800, yMax: -100 },
+      'close-small': { xMin: -800, xMax: -100, yMin: 100,  yMax: 800 },
+      'far-small':  { xMin: 100,  xMax: 800,  yMin: 100,  yMax: 800 },
+    };
+
+    function seededRandom(seed) {
+      let h = 0;
+      for (let i = 0; i < seed.length; i++) {
+        h = ((h << 5) - h + seed.charCodeAt(i)) | 0;
+      }
+      return () => {
+        h = (h * 16807 + 0) % 2147483647;
+        return (h & 0x7fffffff) / 2147483647;
+      };
+    }
+
     function renderItems(items) {
-      // Clear all
-      document.querySelectorAll('.items').forEach(ul => ul.innerHTML = '');
+      // Remove old items
+      document.querySelectorAll('.item').forEach(el => el.remove());
+      document.querySelectorAll('.mm-dot').forEach(el => el.remove());
+
+      const minimap = document.getElementById('minimap');
 
       items.forEach(item => {
-        const quadrant = document.querySelector(`[data-quadrant="${item.quadrant}"] .items`);
-        if (!quadrant) return;
+        const region = QUADRANT_REGIONS[item.quadrant];
+        if (!region) return;
 
-        const li = document.createElement('li');
-        li.className = 'item';
-        li.innerHTML = `
+        const rng = seededRandom(item.text + item.id);
+        const x = CENTER + region.xMin + rng() * (region.xMax - region.xMin);
+        const y = CENTER + region.yMin + rng() * (region.yMax - region.yMin);
+
+        const el = document.createElement('div');
+        el.className = `item q-${item.quadrant}`;
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.innerHTML = `
           <span class="emoji">${item.emoji || ''}</span>${item.text}
           <div class="date">${item.addedAt}</div>
         `;
-        quadrant.appendChild(li);
-      });
+        canvas.appendChild(el);
 
-      // Add empty hints
-      document.querySelectorAll('.quadrant').forEach(q => {
-        const ul = q.querySelector('.items');
-        if (ul.children.length === 0) {
-          ul.innerHTML = '<li class="empty-hint">まだ何もない…</li>';
-        }
+        // Minimap dot
+        const dot = document.createElement('div');
+        dot.className = 'mm-dot';
+        dot.style.left = (x / CANVAS_SIZE * 120) + 'px';
+        dot.style.top = (y / CANVAS_SIZE * 120) + 'px';
+        minimap.appendChild(dot);
       });
     }
 
+    applyPan();
     loadAmbitions();
   </script>
 </body>
