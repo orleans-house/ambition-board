@@ -351,6 +351,32 @@
     .export-actions .btn-close { background: #fff; color: #555; }
     .export-actions .btn-close:hover { background: #f5f5f5; }
 
+    .item .item-progress {
+      margin-top: 0.4rem;
+    }
+    .item .item-progress-label {
+      font-size: 0.65rem;
+      color: #888;
+      margin-bottom: 0.2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .item .item-progress-bar {
+      height: 5px;
+      background: #eee;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .item .item-progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      transition: width 0.3s ease;
+    }
+    .item.done .item-progress-fill {
+      background: linear-gradient(90deg, #f0c040, #e6a800);
+    }
+
     .item .emoji { margin-right: 0.3rem; }
     .item .date { font-size: 0.65rem; color: #bbb; margin-top: 0.3rem; }
 
@@ -845,8 +871,25 @@
         el.style.left = x + 'px';
         el.style.top = y + 'px';
         const badge = isDone ? '<span class="done-badge">👑 DONE</span>' : '';
+        let progressHtml = '';
+        if (item.progress) {
+          const p = item.progress;
+          const pct = Math.min(100, Math.round((p.current / p.target) * 100));
+          progressHtml = `
+            <div class="item-progress">
+              <div class="item-progress-label">
+                <span>${p.current}${p.unit || ''}</span>
+                <span>${pct}% → ${p.target}${p.unit || ''}</span>
+              </div>
+              <div class="item-progress-bar">
+                <div class="item-progress-fill" style="width:${pct}%"></div>
+              </div>
+            </div>
+          `;
+        }
         el.innerHTML = `
           <span class="emoji">${item.emoji || ''}</span><span class="text">${item.text}</span>${badge}
+          ${progressHtml}
           <div class="date">${item.addedAt}${isDone ? ' → ' + item.doneAt : ''}</div>
         `;
         el.addEventListener('click', (e) => {
