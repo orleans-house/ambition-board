@@ -2,126 +2,127 @@
   {
     "id": 1,
     "text": "やりたいことリストの仕組みを作る",
-    "quadrant": "close-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🔥",
-    "x": 1611,
-    "y": 322
+    "emoji": "🔥"
   },
   {
     "id": 2,
     "text": "GuitarFreaks 虹ネーム到達",
-    "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "emoji": "🎸",
-    "notes": "虹ネーム: 8500 / 現在: 7000",
-    "progress": { "current": 7000, "target": 8500, "unit": "" },
-    "x": 3661,
-    "y": 282
+    "progress": { "current": 7000, "target": 8500, "unit": "" }
   },
   {
     "id": 3,
     "text": "Claude Codeの利用方法の実践",
-    "quadrant": "close-small",
     "addedAt": "2026-02-13",
     "emoji": "📖",
-    "links": [{ "label": "How I Use Claude Code", "url": "https://boristane.com/blog/how-i-use-claude-code/" }],
-    "x": 1652,
-    "y": 3101
+    "links": [{ "label": "How I Use Claude Code", "url": "https://boristane.com/blog/how-i-use-claude-code/" }]
   },
   {
     "id": 4,
     "text": "東方整数作品 ALL NNC",
-    "quadrant": "close-big",
     "addedAt": "2026-02-13",
-    "emoji": "🎮",
-    "x": 1845,
-    "y": 1797
+    "emoji": "🎮"
   },
   {
     "id": 5,
     "text": "東方整数作品 ALL ExNC",
-    "quadrant": "far-big",
     "addedAt": "2026-02-13",
-    "emoji": "💀",
-    "x": 3519,
-    "y": 1296
+    "emoji": "💀"
   },
   {
     "id": 6,
     "text": "Claude Code + Bedrockでの開発環境整備",
-    "quadrant": "close-small",
     "addedAt": "2026-02-13",
-    "emoji": "🛠️",
-    "x": 604,
-    "y": 2247
+    "emoji": "🛠️"
   },
   {
     "id": 7,
     "text": "beatmania IIDX 皆伝",
-    "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🎹",
-    "x": 2317,
-    "y": 676
+    "emoji": "🎹"
   },
   {
-    "id": 100,
-    "text": "FF14 絶シリーズ 全制覇",
-    "quadrant": "far-big",
+    "id": 10,
+    "text": "絶バハムート討滅戦",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "⚔️",
-    "isGroup": true,
-    "x": 2900,
-    "y": 900,
-    "children": [
-      { "id": 10, "text": "絶バハムート討滅戦", "emoji": "🐉", "doneAt": "2026-02-13" },
-      { "id": 11, "text": "絶アルテマウェポン破壊作戦", "emoji": "⚔️", "doneAt": "2026-02-13" },
-      { "id": 12, "text": "絶アレキサンダー討滅戦", "emoji": "🤖", "doneAt": "2026-02-13" },
-      { "id": 13, "text": "絶竜詩戦争", "emoji": "🐲", "doneAt": "2026-02-13" },
-      { "id": 14, "text": "絶オメガ検証戦", "emoji": "Ω", "doneAt": "2026-02-13" },
-      { "id": 15, "text": "絶もう一つの未来", "emoji": "🌌", "doneAt": "2026-02-13" }
-    ]
+    "emoji": "🐉"
   },
   {
-    "id": 101,
-    "text": "FF14 零式 目標クリア",
-    "quadrant": "close-big",
+    "id": 11,
+    "text": "絶アルテマウェポン破壊作戦",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "⚔️"
+  },
+  {
+    "id": 12,
+    "text": "絶アレキサンダー討滅戦",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "🤖"
+  },
+  {
+    "id": 13,
+    "text": "絶竜詩戦争",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "🐲"
+  },
+  {
+    "id": 14,
+    "text": "絶オメガ検証戦",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "Ω"
+  },
+  {
+    "id": 15,
+    "text": "絶もう一つの未来",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "🌌"
+  },
+  {
+    "id": 16,
+    "text": "零式 ライトヘビー級 初週クリア",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
     "emoji": "🥊",
-    "isGroup": true,
-    "x": 700,
-    "y": 850,
-    "children": [
-      { "id": 16, "text": "ライトヘビー級 初週クリア", "emoji": "🥊", "doneAt": "2026-02-13", "notes": "5日でクリア" },
-      { "id": 17, "text": "クルーザー級 初週クリア", "emoji": "🥊", "doneAt": "2026-02-13", "notes": "7日でクリア" },
-      { "id": 18, "text": "ヘビー級 3週以内クリア", "emoji": "🥊", "doneAt": "2026-02-13", "notes": "20日でクリア" }
-    ]
+    "notes": "5日でクリア"
+  },
+  {
+    "id": 17,
+    "text": "零式 クルーザー級 初週クリア",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "🥊",
+    "notes": "7日でクリア"
+  },
+  {
+    "id": 18,
+    "text": "零式 ヘビー級 3週以内クリア",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "🥊",
+    "notes": "20日でクリア"
   },
   {
     "id": 19,
     "text": "Drummania 虹ネーム到達",
-    "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "emoji": "🥁",
-    "notes": "虹ネーム: 8500 / 現在: 5500",
-    "progress": { "current": 5500, "target": 8500, "unit": "" },
-    "x": 3049,
-    "y": 273
+    "progress": { "current": 5500, "target": 8500, "unit": "" }
   },
   {
     "id": 20,
     "text": "DJMAX RESPECT V 4B LoD達成",
-    "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "emoji": "🎵",
-    "notes": "LoD: 9980 / 現在: 9300",
-    "progress": { "current": 9300, "target": 9980, "unit": "" },
-    "x": 3323,
-    "y": 102
+    "progress": { "current": 9300, "target": 9980, "unit": "" }
   }
 ]
