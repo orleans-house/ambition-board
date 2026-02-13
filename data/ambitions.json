@@ -42,5 +42,21 @@
     "quadrant": "close-small",
     "addedAt": "2026-02-13",
     "emoji": "🛠️"
+  },
+  {
+    "id": 7,
+    "text": "beatmania IIDX 皆伝",
+    "quadrant": "far-big",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "🎹"
+  },
+  {
+    "id": 8,
+    "text": "Final Fantasy XIV 6絶",
+    "quadrant": "far-big",
+    "addedAt": "2026-02-13",
+    "doneAt": "2026-02-13",
+    "emoji": "⚔️"
   }
 ]
