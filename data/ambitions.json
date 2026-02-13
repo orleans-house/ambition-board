@@ -5,14 +5,18 @@
     "quadrant": "close-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🔥"
+    "emoji": "🔥",
+    "x": 1611,
+    "y": 322
   },
   {
     "id": 2,
     "text": "GuitarFreaks 虹ネーム到達",
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
-    "emoji": "🎸"
+    "emoji": "🎸",
+    "x": 3661,
+    "y": 282
   },
   {
     "id": 3,
@@ -20,28 +24,41 @@
     "quadrant": "close-small",
     "addedAt": "2026-02-13",
     "emoji": "📖",
-    "links": [{"label": "How I Use Claude Code", "url": "https://boristane.com/blog/how-i-use-claude-code/"}]
+    "links": [
+      {
+        "label": "How I Use Claude Code",
+        "url": "https://boristane.com/blog/how-i-use-claude-code/"
+      }
+    ],
+    "x": 1652,
+    "y": 3101
   },
   {
     "id": 4,
     "text": "東方整数作品 ALL NNC",
     "quadrant": "close-big",
     "addedAt": "2026-02-13",
-    "emoji": "🎮"
+    "emoji": "🎮",
+    "x": 1845,
+    "y": 1797
   },
   {
     "id": 5,
     "text": "東方整数作品 ALL ExNC",
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
-    "emoji": "💀"
+    "emoji": "💀",
+    "x": 3519,
+    "y": 1296
   },
   {
     "id": 6,
     "text": "Claude Code + Bedrockでの開発環境整備",
     "quadrant": "close-small",
     "addedAt": "2026-02-13",
-    "emoji": "🛠️"
+    "emoji": "🛠️",
+    "x": 604,
+    "y": 2247
   },
   {
     "id": 7,
@@ -49,7 +66,9 @@
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🎹"
+    "emoji": "🎹",
+    "x": 2317,
+    "y": 676
   },
   {
     "id": 10,
@@ -57,7 +76,9 @@
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🐉"
+    "emoji": "🐉",
+    "x": 3223,
+    "y": 963
   },
   {
     "id": 11,
@@ -65,7 +86,9 @@
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "⚔️"
+    "emoji": "⚔️",
+    "x": 2834,
+    "y": 1265
   },
   {
     "id": 12,
@@ -73,7 +96,9 @@
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🤖"
+    "emoji": "🤖",
+    "x": 3355,
+    "y": 450
   },
   {
     "id": 13,
@@ -81,7 +106,9 @@
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🐲"
+    "emoji": "🐲",
+    "x": 2198,
+    "y": 932
   },
   {
     "id": 14,
@@ -89,7 +116,9 @@
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "Ω"
+    "emoji": "Ω",
+    "x": 2999,
+    "y": 1835
   },
   {
     "id": 15,
@@ -97,7 +126,9 @@
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
-    "emoji": "🌌"
+    "emoji": "🌌",
+    "x": 2814,
+    "y": 606
   },
   {
     "id": 16,
@@ -106,7 +137,9 @@
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
     "notes": "5日でクリア",
-    "emoji": "🥊"
+    "emoji": "🥊",
+    "x": 673,
+    "y": 742
   },
   {
     "id": 17,
@@ -115,7 +148,9 @@
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
     "notes": "7日でクリア",
-    "emoji": "🥊"
+    "emoji": "🥊",
+    "x": 643,
+    "y": 937
   },
   {
     "id": 18,
@@ -124,20 +159,26 @@
     "addedAt": "2026-02-13",
     "doneAt": "2026-02-13",
     "notes": "20日でクリア",
-    "emoji": "🥊"
+    "emoji": "🥊",
+    "x": 739,
+    "y": 797
   },
   {
     "id": 19,
     "text": "Drummania 虹ネーム到達",
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
-    "emoji": "🥁"
+    "emoji": "🥁",
+    "x": 3049,
+    "y": 273
   },
   {
     "id": 20,
     "text": "DJMAX RESPECT V LoD達成",
     "quadrant": "far-big",
     "addedAt": "2026-02-13",
-    "emoji": "🎵"
+    "emoji": "🎵",
+    "x": 3323,
+    "y": 102
   }
 ]
