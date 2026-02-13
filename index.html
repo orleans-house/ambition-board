@@ -271,6 +271,70 @@
 
     .item.hidden { display: none; }
     .item.highlight { box-shadow: 0 0 0 3px #e67e22, 0 4px 20px rgba(0,0,0,0.15); z-index: 10; }
+    /* Group cards */
+    .item.group-card {
+      border-left-width: 4px;
+      cursor: pointer;
+    }
+    .item .group-badge {
+      display: inline-block;
+      font-size: 0.6rem;
+      background: #eee;
+      color: #888;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.3rem;
+      font-weight: 600;
+    }
+    .item.done .group-badge {
+      background: rgba(240,192,64,0.3);
+      color: #b8860b;
+    }
+
+    /* Expanded children panel */
+    .group-children {
+      position: absolute;
+      background: rgba(255,255,255,0.97);
+      border-radius: 10px;
+      padding: 0.6rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      z-index: 15;
+      min-width: 240px;
+      border: 1px solid #eee;
+    }
+
+    .group-children .child-item {
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      background: #f8f8f8;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: background 0.1s ease;
+    }
+    .group-children .child-item:hover { background: #f0f0f0; }
+    .group-children .child-item.child-done {
+      background: linear-gradient(135deg, #fff9e6, #fff4cc);
+    }
+    .group-children .child-item .child-done-mark {
+      font-size: 0.65rem;
+      color: #b8860b;
+      margin-left: auto;
+      font-weight: 600;
+    }
+    .group-children .child-item .child-notes {
+      font-size: 0.65rem;
+      color: #999;
+      margin-left: 0.3rem;
+    }
+
     .item.item-dragging {
       z-index: 20;
       box-shadow: 0 8px 30px rgba(0,0,0,0.2);
@@ -887,15 +951,28 @@
             </div>
           `;
         }
+
+        let groupBadge = '';
+        if (item.isGroup && item.children) {
+          const doneC = item.children.filter(c => c.doneAt).length;
+          groupBadge = `<span class="group-badge">▼ ${doneC}/${item.children.length}</span>`;
+          el.classList.add('group-card');
+        }
+
         el.innerHTML = `
-          <span class="emoji">${item.emoji || ''}</span><span class="text">${item.text}</span>${badge}
+          <span class="emoji">${item.emoji || ''}</span><span class="text">${item.text}</span>${badge}${groupBadge}
           ${progressHtml}
           <div class="date">${item.addedAt}${isDone ? ' → ' + item.doneAt : ''}</div>
         `;
+
         el.addEventListener('click', (e) => {
           if (hasDragged) return;
           e.stopPropagation();
-          showDetail(item);
+          if (item.isGroup && item.children) {
+            toggleGroupChildren(item, el, x, y);
+          } else {
+            showDetail(item);
+          }
         });
         canvas.appendChild(el);
 
@@ -962,6 +1039,67 @@
       overlay.querySelector('.detail-close').addEventListener('click', () => overlay.remove());
       document.body.appendChild(overlay);
     }
+
+    let openGroupId = null;
+
+    function toggleGroupChildren(item, el, x, y) {
+      // Close if already open
+      const existing = document.querySelector(`.group-children[data-group="${item.id}"]`);
+      if (existing) {
+        existing.remove();
+        openGroupId = null;
+        return;
+      }
+
+      // Close any other open group
+      document.querySelectorAll('.group-children').forEach(e => e.remove());
+      openGroupId = item.id;
+
+      const panel = document.createElement('div');
+      panel.className = 'group-children';
+      panel.dataset.group = item.id;
+      panel.style.left = x + 'px';
+      panel.style.top = (y + el.offsetHeight + 8) + 'px';
+      panel.style.transform = `scale(${1 / zoom})`;
+      panel.style.transformOrigin = 'top left';
+
+      panel.innerHTML = item.children.map(child => {
+        const cDone = child.doneAt ? 'child-done' : '';
+        const doneMark = child.doneAt ? '<span class="child-done-mark">👑</span>' : '';
+        const notes = child.notes ? `<span class="child-notes">(${child.notes})</span>` : '';
+        return `
+          <div class="child-item ${cDone}" data-child-id="${child.id}">
+            <span>${child.emoji || ''}</span>
+            <span>${child.text}</span>
+            ${notes}
+            ${doneMark}
+          </div>
+        `;
+      }).join('');
+
+      // Click child to show detail
+      panel.querySelectorAll('.child-item').forEach(cel => {
+        cel.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const childId = parseInt(cel.dataset.childId);
+          const child = item.children.find(c => c.id === childId);
+          if (child) showDetail({ ...child, quadrant: item.quadrant, addedAt: item.addedAt });
+        });
+      });
+
+      // Prevent pan when interacting with panel
+      panel.addEventListener('mousedown', (e) => e.stopPropagation());
+
+      canvas.appendChild(panel);
+    }
+
+    // Close group children when clicking canvas background
+    document.addEventListener('click', (e) => {
+      if (openGroupId && !e.target.closest('.group-children') && !e.target.closest('.item')) {
+        document.querySelectorAll('.group-children').forEach(el => el.remove());
+        openGroupId = null;
+      }
+    });
 
     function updateExportBtn() {
       const btn = document.getElementById('export-btn');
