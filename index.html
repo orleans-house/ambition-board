@@ -291,48 +291,8 @@
       color: #b8860b;
     }
 
-    /* Expanded children panel */
-    .group-children {
-      position: absolute;
-      background: rgba(255,255,255,0.97);
-      border-radius: 10px;
-      padding: 0.6rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-      backdrop-filter: blur(4px);
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      z-index: 15;
-      min-width: 240px;
-      border: 1px solid #eee;
-    }
-
-    .group-children .child-item {
-      padding: 0.5rem 0.8rem;
-      border-radius: 8px;
-      background: #f8f8f8;
-      font-size: 0.82rem;
-      line-height: 1.5;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      transition: background 0.1s ease;
-    }
-    .group-children .child-item:hover { background: #f0f0f0; }
-    .group-children .child-item.child-done {
-      background: linear-gradient(135deg, #fff9e6, #fff4cc);
-    }
-    .group-children .child-item .child-done-mark {
-      font-size: 0.65rem;
-      color: #b8860b;
-      margin-left: auto;
-      font-weight: 600;
-    }
-    .group-children .child-item .child-notes {
-      font-size: 0.65rem;
-      color: #999;
-      margin-left: 0.3rem;
+    .item.child-card {
+      transition: opacity 0.2s ease, box-shadow 0.15s ease;
     }
 
     .item.item-dragging {
@@ -1042,61 +1002,57 @@
 
     let openGroupId = null;
 
-    function toggleGroupChildren(item, el, x, y) {
+    function toggleGroupChildren(item, parentEl, px, py) {
       // Close if already open
-      const existing = document.querySelector(`.group-children[data-group="${item.id}"]`);
-      if (existing) {
-        existing.remove();
+      if (openGroupId === item.id) {
+        document.querySelectorAll(`.item.child-of-${item.id}`).forEach(e => e.remove());
         openGroupId = null;
         return;
       }
 
       // Close any other open group
-      document.querySelectorAll('.group-children').forEach(e => e.remove());
+      if (openGroupId !== null) {
+        document.querySelectorAll(`.item[class*="child-of-"]`).forEach(e => e.remove());
+      }
       openGroupId = item.id;
 
-      const panel = document.createElement('div');
-      panel.className = 'group-children';
-      panel.dataset.group = item.id;
-      panel.style.left = x + 'px';
-      panel.style.top = (y + el.offsetHeight + 8) + 'px';
-      panel.style.transform = `scale(${1 / zoom})`;
-      panel.style.transformOrigin = 'top left';
+      // Spawn child cards below parent, stacked vertically
+      const cardHeight = 80;
+      const gap = 10;
+      const startY = py + parentEl.offsetHeight / zoom + 20;
 
-      panel.innerHTML = item.children.map(child => {
-        const cDone = child.doneAt ? 'child-done' : '';
-        const doneMark = child.doneAt ? '<span class="child-done-mark">👑</span>' : '';
-        const notes = child.notes ? `<span class="child-notes">(${child.notes})</span>` : '';
-        return `
-          <div class="child-item ${cDone}" data-child-id="${child.id}">
-            <span>${child.emoji || ''}</span>
-            <span>${child.text}</span>
-            ${notes}
-            ${doneMark}
-          </div>
+      item.children.forEach((child, i) => {
+        const childEl = document.createElement('div');
+        const cDone = !!child.doneAt;
+        childEl.className = `item q-${item.quadrant}${cDone ? ' done' : ''} child-card child-of-${item.id}`;
+        childEl.dataset.itemId = child.id;
+        const cy = startY + i * (cardHeight + gap);
+        childEl.style.left = px + 'px';
+        childEl.style.top = cy + 'px';
+        childEl.style.transform = `scale(${1 / zoom})`;
+        childEl.style.transformOrigin = 'top left';
+
+        const badge = cDone ? '<span class="done-badge">👑 DONE</span>' : '';
+        const notesText = child.notes ? `<div class="date">${child.notes}</div>` : '';
+        childEl.innerHTML = `
+          <span class="emoji">${child.emoji || ''}</span><span class="text">${child.text}</span>${badge}
+          ${notesText}
         `;
-      }).join('');
 
-      // Click child to show detail
-      panel.querySelectorAll('.child-item').forEach(cel => {
-        cel.addEventListener('click', (e) => {
+        childEl.addEventListener('click', (e) => {
+          if (hasDragged) return;
           e.stopPropagation();
-          const childId = parseInt(cel.dataset.childId);
-          const child = item.children.find(c => c.id === childId);
-          if (child) showDetail({ ...child, quadrant: item.quadrant, addedAt: item.addedAt });
+          showDetail({ ...child, quadrant: item.quadrant, addedAt: item.addedAt });
         });
+
+        canvas.appendChild(childEl);
       });
-
-      // Prevent pan when interacting with panel
-      panel.addEventListener('mousedown', (e) => e.stopPropagation());
-
-      canvas.appendChild(panel);
     }
 
     // Close group children when clicking canvas background
     document.addEventListener('click', (e) => {
-      if (openGroupId && !e.target.closest('.group-children') && !e.target.closest('.item')) {
-        document.querySelectorAll('.group-children').forEach(el => el.remove());
+      if (openGroupId && !e.target.closest('.item')) {
+        document.querySelectorAll(`.item[class*="child-of-"]`).forEach(el => el.remove());
         openGroupId = null;
       }
     });
